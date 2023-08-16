@@ -9,14 +9,13 @@ const { ERROR_404 } = require('./errors/errors');
 const { PORT = 3000 } = process.env;
 
 mongoose.connect('mongodb://0.0.0.0:27017/mestodb');
-console.log('Соединено с db');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use((req, res, next) => {
   req.user = {
-    _id: '64dcddbb974a3dfca644616e',
+    _id: '64dcf88b332c3ffc96ab5839',
   };
   next();
 });
