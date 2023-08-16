@@ -1,7 +1,8 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const router = require('./routes');
 const bodyParser = require('body-parser');
+const router = require('./routes');
+
 const app = express();
 const { ERROR_404 } = require('./errors/errors');
 
@@ -29,4 +30,3 @@ app.use((req, res) => {
 });
 
 app.listen(PORT);
-
