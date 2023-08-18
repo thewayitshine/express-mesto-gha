@@ -1,7 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-const router = require('./routes');
 const { errors, celebrate } = require('celebrate');
 
 const { createUser, login } = require('./controllers/users');
@@ -10,6 +9,7 @@ const { requestLogger, errorLogger } = require('./middlewares/logger');
 const auth = require('./middlewares/auth');
 
 const NotFound = require('./errors/notFoundError');
+const router = require('./routes');
 
 const app = express();
 
