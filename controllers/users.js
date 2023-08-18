@@ -26,7 +26,7 @@ const createUser = (req, res, next) => {
       User.create({
         email, password: hash, name, about, avatar,
       })
-        .then((newUser) => res.send({
+        .then((newUser) => res.status(201).send({
           email: newUser.email,
           name: newUser.name,
           about: newUser.about,
@@ -35,9 +35,12 @@ const createUser = (req, res, next) => {
         .catch((err) => {
           if (err.code === 11000) {
             next(new Conflict('Пользователь с таким email уже существует!'));
+          } else {
+            next(err);
           }
         });
-    });
+    })
+    .catch(next);
 };
 
 const getAllUsers = (req, res, next) => {

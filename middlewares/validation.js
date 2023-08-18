@@ -1,10 +1,10 @@
 const { Joi } = require('celebrate');
 
-const regex = /^(http|https):\/\/[^ "]+$/;
+const regex = /^((ftp|http|https):\/\/)?(www\.)?([A-Za-zА-Яа-я0-9]{1}[A-Za-zА-Яа-я0-9-]*\.?)*\.{1}[A-Za-zА-Яа-я0-9-]{2,8}(\/([\w#!:.?+=&%@!\-/])*)?/;
 
 const getUserByIdValidation = {
   params: Joi.object({
-    userId: Joi.string().length(24),
+    userId: Joi.string().length(24).hex().required(),
   }),
 };
 
@@ -47,13 +47,13 @@ const createCardValidation = {
 
 const deleteCardValidation = {
   params: Joi.object({
-    cardId: Joi.string().length(24),
+    cardId: Joi.string().length(24).hex().required(),
   }),
 };
 
 const likeCardValidation = {
   params: Joi.object({
-    cardId: Joi.string().length(24),
+    cardId: Joi.string().length(24).hex().required(),
   }),
 };
 

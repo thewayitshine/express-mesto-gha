@@ -23,7 +23,7 @@ const addNewCard = (req, res, next) => {
 
   Card.create({ name, link, owner: _id })
     .then((newCard) => {
-      res.send(newCard);
+      res.status(201).send(newCard);
     })
     .catch(next);
 };
