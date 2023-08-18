@@ -2,9 +2,16 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const router = require('./routes');
+const { errors, celebrate } = require('celebrate');
+
+const { createUser, login } = require('./controllers/users');
+const { registerValidation, loginValidation } = require('./middlewares/validation');
+const { requestLogger, errorLogger } = require('./middlewares/logger');
+const auth = require('./middlewares/auth');
+
+const NotFound = require('./errors/notFoundError');
 
 const app = express();
-const { ERROR_404 } = require('./errors/errors');
 
 const { PORT = 3000 } = process.env;
 
@@ -13,19 +20,33 @@ mongoose.connect('mongodb://0.0.0.0:27017/mestodb');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use((req, res, next) => {
-  req.user = {
-    _id: '64dcf88b332c3ffc96ab5839',
-  };
-  next();
-});
+app.use(requestLogger);
+
+app.post('/signin', celebrate(loginValidation), login);
+app.post('/signup', celebrate(registerValidation), createUser);
+
+app.use(auth);
 
 app.use('/', router);
 
-app.use((req, res) => {
-  res.status(ERROR_404).send({
-    message: 'Данная cтраница не найдена',
+app.use(errorLogger);
+
+app.use(errors());
+
+app.use(() => {
+  throw (new NotFound('Маршрут не существует'));
+});
+
+app.use((err, req, res, next) => {
+  const { statusCode = 500, message } = err;
+
+  res.status(statusCode).send({
+    message: statusCode === 500
+      ? 'На сервере произошла ошибка'
+      : message,
   });
+
+  next();
 });
 
 app.listen(PORT);
